@@ -55,7 +55,7 @@
                          <?php  if(isset($product->image) && !empty($product->image))
                             { ?>
                              <div class="cl-overlay">
-                                 <a href="{{ route('image_delete',$id) }}"><img class="cl-close-bt" src="{{asset('images/close.svg')}}"></a>
+                                 <a href="{{ route('image_delete',$id) }}"><img class="cl-close-bt" src="{{asset('images/close.svg')}}" width="2%"></a>
                              </div>
                          <?php } ?>
                          <img src=" {{ $product->image }}" style="width: 10%">

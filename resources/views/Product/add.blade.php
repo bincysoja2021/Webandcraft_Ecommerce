@@ -8,6 +8,22 @@
     <meta charset="UTF-8">
     <title>Add Product</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+            .holder {
+                height: 100px;
+                width: 100px;
+                border: 2px solid black;
+            }
+            img {
+                max-width: 100px;
+                max-height: 100px;
+                min-width: 100px;
+                min-height: 100px;
+            }
+            input[type="file"] {
+                margin-top: 5px;
+            }
+        </style>
 </head>
 
 <body>
@@ -43,11 +59,14 @@
                 <div class="col-xs-12 col-sm-12 col-md-12">
                     <div class="form-group">
                         <strong>Product Image:</strong>
-                         <input type="file" name="image" class="form-control">
+                         <input type="file" name="image" class="form-control" id="photo">
                          @error('image')
                         <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
                         @enderror
                         
+                    </div>
+                    <div class="holder" style="display: none;" id="holder">
+                        <img id="imgPreview" src="#" alt="pic" />
                     </div>
                 </div>
 
@@ -74,15 +93,33 @@
                         @enderror
                     </div>
                 </div>
-
-
-                
-                
                 
                 <button type="submit" class="btn btn-primary ml-3">Submit</button>
             </div>
         </form>
     </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js">
+    </script>
+    <script>
+        $('#photo').click(function() {
+        $('.holder').toggle("slide");
+        });
+
+        $(document).ready(() => {
+            $("#photo").change(function () {
+                const file = this.files[0];
+                if (file) {
+                    let reader = new FileReader();
+                    reader.onload = function (event) {
+                        $("#imgPreview")
+                          .attr("src", event.target.result);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        });
+    </script>
+
 </body>
 
 </html>
