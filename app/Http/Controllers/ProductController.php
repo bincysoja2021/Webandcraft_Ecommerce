@@ -64,6 +64,15 @@ class ProductController extends Controller
         return view('Product.edit',compact('product','cat'));
     }
 
+    public function image_delete($id)
+    {
+        $path="http://127.0.0.1:8000/assets/image/".$id;
+        unlink('assets/image/'.$id);
+        $product=Product::where('image',$path)->update(['image'=>null]);
+        return redirect()->back()->with('success', 'successfully delete the images.');   
+
+    }
+
     public function update(Request $req)
     {
         $req->validate([

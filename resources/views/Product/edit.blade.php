@@ -31,6 +31,11 @@
         <form action="{{ route('product_update',$product->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('GET')
+            <?php 
+            $url=$product->image;
+            $id = substr($url, strrpos($url, '/') + 1);
+            ?>
+
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-12">
                     <div class="form-group">
@@ -47,9 +52,13 @@
                     <div class="form-group">
                         <strong>Product Image:</strong>
                          <input type="file" name="image" class="form-control">
+                         <?php  if(isset($product->image) && !empty($product->image))
+                            { ?>
+                             <div class="cl-overlay">
+                                 <a href="{{ route('image_delete',$id) }}"><img class="cl-close-bt" src="{{asset('images/close.svg')}}"></a>
+                             </div>
+                         <?php } ?>
                          <img src=" {{ $product->image }}" style="width: 10%">
-                         
-                        
                     </div>
                 </div>
 
