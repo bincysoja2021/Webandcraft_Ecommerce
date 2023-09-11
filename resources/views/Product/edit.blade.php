@@ -64,6 +64,24 @@
 
                 <div class="col-xs-12 col-sm-12 col-md-12">
                     <div class="form-group">
+                        <strong>select multiple Image:</strong>
+                         <input type="file" name="multi_image[]" class="form-control" multiple>
+                         @foreach($multi_image as $img)
+                         <?php  if(isset($img->image) && !empty($img->image))
+                            { ?>
+                             <div class="cl-overlay">
+                                 <a href="{{ route('multi_image_delete',$img->image) }}"><img class="cl-close-bt" src="{{asset('images/close.svg')}}" width="2%"></a>
+                             </div>
+                         <?php } ?>
+                         <img src="{{URL('storage/mobile_banner/'.$img->image)}}" style="width: 10%">
+                         @endforeach
+                        
+                    </div>
+                   
+                </div>
+
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="form-group">
                         <strong>Product Category:</strong>
                         <select name="cat_id">
                         @foreach($cat as $val)

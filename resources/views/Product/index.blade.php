@@ -33,7 +33,7 @@
                 <tr>
                     <th>S.No</th>
                     <th>Name</th>
-                    <th>Image</th>
+                    <th style="width:30%">Image</th>
                     <th>Category</th>
                     <th>Price</th>
                     <th>Action</th>
@@ -44,7 +44,7 @@
                     <tr>
                         <td>{{ $key + 1 }}</td>
                         <td>{{ $products->name }}</td>
-                        <td><img src=" {{ $products->image }}" style="width: 10%"></td>
+                        <td><img src=" {{ $products->image }}" style="width: 20%"></td>
                         <td>{{$products->cat_deatils['name']}}</td>
                         <td>{{ $products->price }}</td>
                         <td>

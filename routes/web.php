@@ -37,6 +37,7 @@ Route::get('/add_product', [App\Http\Controllers\ProductController::class, 'add_
 Route::post('/product_store', [App\Http\Controllers\ProductController::class, 'store'])->name('product_store');
 Route::get('/product_edit/{id}', [App\Http\Controllers\ProductController::class, 'edit'])->name('product_edit');
 Route::get('/image_delete/{id}', [App\Http\Controllers\ProductController::class, 'image_delete'])->name('image_delete');
+Route::get('/multi_image_delete/{id}', [App\Http\Controllers\ProductController::class, 'multi_image_delete'])->name('multi_image_delete');
 Route::get('/product_update/{id}', [App\Http\Controllers\ProductController::class, 'update'])->name('product_update');
 Route::delete('/product_destroy/{id}', [App\Http\Controllers\ProductController::class, 'destroy'])->name('product_destroy');
 

@@ -72,6 +72,15 @@
 
                 <div class="col-xs-12 col-sm-12 col-md-12">
                     <div class="form-group">
+                        <strong>select multiple Image:</strong>
+                         <input type="file" name="multi_image[]" class="form-control" multiple>
+                        
+                    </div>
+                   
+                </div>
+
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="form-group">
                         <strong>Product Category:</strong>
                         <select name="cat_id">
                         @foreach($cat as $val)

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\OrderProducts;
+use App\Models\multiimage;
 
 class ProductController extends Controller
 {
@@ -47,6 +48,7 @@ class ProductController extends Controller
 
             $request->image->move(public_path('/assets/image/'),$filename);
         }
+        
         $product=new Product();
         $product->name=$request->name;
         $product->cat_id=$request->cat_id;
@@ -54,6 +56,23 @@ class ProductController extends Controller
         $product->image=$filename;
         $product->save();
 
+
+        $banner = array();
+        if(isset($request->multi_image) && !empty($request->multi_image))
+        {
+             $image_gets = isset($request->multi_image) ? $request->multi_image : ''; 
+             foreach ($image_gets as $image) {
+                $fileOriginalName = $image->getClientOriginalExtension();
+                $image_name = md5(rand(1000, 10000));
+                $fileNewName = $image_name .'.'. $fileOriginalName;
+                $image->storeAs('mobile_banner', $fileNewName, 'public');
+                multiimage::create([
+                    'p_id' => $product->id,
+                    'image' => $fileNewName,
+                ]); 
+            }
+        }
+         
         return redirect()->route('list_product')->with('success','Product has been created successfully.');
     }
 
@@ -61,7 +80,8 @@ class ProductController extends Controller
     {
         $cat=Category::get();
         $product=Product::where('id',$req->id)->first();
-        return view('Product.edit',compact('product','cat'));
+        $multi_image=multiimage::where('p_id',$req->id)->get();
+        return view('Product.edit',compact('product','cat','multi_image'));
     }
 
     public function image_delete($id)
@@ -69,6 +89,12 @@ class ProductController extends Controller
         $path="http://127.0.0.1:8000/assets/image/".$id;
         unlink('assets/image/'.$id);
         $product=Product::where('image',$path)->update(['image'=>null]);
+        return redirect()->back()->with('success', 'successfully delete the images.');   
+
+    }
+    public function multi_image_delete($id)
+    {
+        $product=multiimage::where('image',$id)->forceDelete();
         return redirect()->back()->with('success', 'successfully delete the images.');   
 
     }
@@ -95,7 +121,32 @@ class ProductController extends Controller
         }
         
         $category=Product::where('id',$req->id)->update(['name'=>$req->name,'cat_id'=>$req->cat_id,'price'=>$req->price,'image'=>$filename]);
-
+        
+        $banner = array();
+        if(isset($req->multi_image) && !empty($req->multi_image))
+        {
+            $multi_image=multiimage::where('p_id',$req->id)->get();
+            foreach($multi_image as $key)
+            {
+                if(\Storage::exists('storage/mobile_banner/'.$key['image']))
+                {
+                    \Storage::delete('storage/mobile_banner/'.$key['image']);
+                }
+            }
+            multiimage::where('p_id',$req->id)->forceDelete();
+            $image_gets = isset($req->multi_image) ? $req->multi_image : ''; 
+            foreach ($image_gets as $image) {
+                $fileOriginalName = $image->getClientOriginalExtension();
+                $image_name = md5(rand(1000, 10000));
+                $fileNewName = $image_name .'.'. $fileOriginalName;
+                $image->storeAs('mobile_banner', $fileNewName, 'public');
+                multiimage::create([
+                    'p_id' => $req->id,
+                    'image' => $fileNewName,
+                ]); 
+            }
+        }
+        
         return redirect()->route('list_product')->with('success','Product Has Been updated successfully');
     }
 
